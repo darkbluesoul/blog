@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>disqus on Darkblue Soul</title><link>https://www.darkbluesoul.cc/tags/disqus/</link><description>Recent content in disqus on Darkblue Soul</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 29 Dec 2021 09:42:20 +0800</lastBuildDate><atom:link href="https://www.darkbluesoul.cc/tags/disqus/index.xml" rel="self" type="application/rss+xml"/><item><title>Adam Blog 2.0主题修改</title><link>https://www.darkbluesoul.cc/p/adam-blog-2.0%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9/</link><pubDate>Wed, 29 Dec 2021 09:42:20 +0800</pubDate><guid>https://www.darkbluesoul.cc/p/adam-blog-2.0%E4%B8%BB%E9%A2%98%E4%BF%AE%E6%94%B9/</guid><description>&lt;h2 id="删除mailchimp">删除mailchimp&lt;/h2>
+&lt;p>mailchimp原来的账号想不起来了，暂时懒得弄，不知道用邮件订阅的多不多？
+_config.yml里面mailchimp注释掉好像也有显示的，有点忘了，不喜欢，就直接把newsletter.html整个注释掉了，就不显示了。&lt;/p>
+&lt;h2 id="修改disqus为来必力">修改Disqus为来必力&lt;/h2>
+&lt;p>国内访问disqus实在太慢了，改成&lt;a class="link" href="http://livere.com/" target="_blank" rel="noopener"
+>来必力&lt;/a>好像还行，不过也不是很快,先用着吧。
+打开_includes/disqus.html，找到&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">{% if site.discus_identifier %}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这个是判断config有没有填写disqus帐号的，有就显示评论，没有就不显示，我把这条删了;&lt;/p>
+&lt;p>找到&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;disqus_thread&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>在中间加入你的来必力代码，加好以后就下面这样：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;disqus_thread&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;span class="c">&amp;lt;!-- 来必力City版安装代码,隐藏广告id --&amp;gt;&lt;/span>
+&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">style&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;span class="p">#&lt;/span>&lt;span class="nn">taboola-livere&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">display&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">none&lt;/span>&lt;span class="p">;}&lt;/span>
+&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">style&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">div&lt;/span> &lt;span class="na">id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;lv-container&amp;#34;&lt;/span> &lt;span class="na">data-id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;city&amp;#34;&lt;/span> &lt;span class="na">data-uid&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;M*****************==&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">script&lt;/span> &lt;span class="na">type&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;text/javascript&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="kd">function&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">d&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">s&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kd">var&lt;/span> &lt;span class="nx">j&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">e&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">getElementsByTagName&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">s&lt;/span>&lt;span class="p">)[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">];&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="k">typeof&lt;/span> &lt;span class="nx">LivereTower&lt;/span> &lt;span class="o">===&lt;/span> &lt;span class="s1">&amp;#39;function&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="k">return&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="p">}&lt;/span>
+&lt;span class="nx">j&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">createElement&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">s&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="nx">j&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">src&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;https://cdn-city.livere.com/js/embed.dist.js&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="nx">j&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="kr">async&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="kc">true&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="nx">e&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">parentNode&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">insertBefore&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">j&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">e&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">})(&lt;/span>&lt;span class="nb">document&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;script&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">script&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">noscript&lt;/span>&lt;span class="p">&amp;gt;&lt;/span> 为正常使用来必力评论功能请激活JavaScript&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">noscript&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;span class="c">&amp;lt;!-- City版安装代码已完成 --&amp;gt;&lt;/span>
+&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">div&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>删除原disqus代码：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="nx">script&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="kd">function&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kd">var&lt;/span> &lt;span class="nx">d&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">document&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">s&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">createElement&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;script&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="nx">s&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">src&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;//{{ site.discus_identifier }}.disqus.com/embed.js&amp;#39;&lt;/span>&lt;span class="p">;&lt;/span>
+&lt;span class="nx">s&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setAttribute&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;data-timestamp&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="o">+&lt;/span>&lt;span class="k">new&lt;/span> &lt;span class="nb">Date&lt;/span>&lt;span class="p">());&lt;/span>
+&lt;span class="p">(&lt;/span>&lt;span class="nx">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">head&lt;/span> &lt;span class="o">||&lt;/span> &lt;span class="nx">d&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">body&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">appendChild&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">s&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="p">})();&lt;/span>
+&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="err">/script&amp;gt;&lt;/span>
+&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="nx">noscript&lt;/span>&lt;span class="o">&amp;gt;&lt;/span>&lt;span class="nx">Please&lt;/span> &lt;span class="nx">enable&lt;/span> &lt;span class="nx">JavaScript&lt;/span> &lt;span class="nx">to&lt;/span> &lt;span class="nx">view&lt;/span> &lt;span class="nx">the&lt;/span> &lt;span class="nx">comments&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="o">&amp;lt;&lt;/span>&lt;span class="err">/noscript&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>保存。&lt;/p>
+&lt;h2 id="修改中文字数统计">修改中文字数统计&lt;/h2>
+&lt;p>这个模板英文统计没问题，中文么就不行了，参照&lt;a class="link" href="https://github.com/jekyll/jekyll/issues/1921" target="_blank" rel="noopener"
+> The filter number_of_words can&amp;rsquo;t parse Chinese correctly #1921 &lt;/a>&lt;/p>
+&lt;p>打开_includes/post-meta.html，找到&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">{% assign words = document.content | strip_html | number_of_words %}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>修改为&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">{% assign words = document.content | strip_html | size %}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>就可以正常统计中文字数了。阅读时间就没改了，好像有篇文章说英文跟中文阅读速度差不多的，恩，主要是懒。&lt;/p>
+&lt;h2 id="修改摘要显示">修改摘要显示&lt;/h2>
+&lt;p>模板本来是按100个单词截取摘要的，本来以为我中文字数改了也会正常了，结果存档页还是整篇显示，搜了一下，&lt;a class="link" href="https://cyhour.com/189/" target="_blank" rel="noopener"
+>Jekyll 使用记录&lt;/a>这里找到办法了，原来&lt;a class="link" href="http://jekyllrb.com/docs/posts/#post-excerpts" target="_blank" rel="noopener"
+>官方文档&lt;/a>就有写的。&lt;/p>
+&lt;p>在_config.yml里面添加一行&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yml" data-lang="yml">&lt;span class="nt">excerpt_separator&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="s1">&amp;#39;&amp;lt;!--more--&amp;gt;&amp;#39;&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>然后打开_pages/archive.html，找到&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">{{ post.content | markdownify | strip_newlines | truncatewords: 100 }}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>改为&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">{{ post.excerpt }}
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>这样设置有点烦的地方就是每篇文章里都要在摘要后面加上&lt;code>&amp;lt;!--more--&amp;gt;&lt;/code>，多了自定义的快乐，少了自动的简便。不过没事，复制粘贴一下也不会很辛苦。其实这里我弄了好久，还以为自己代码弄错了，结果一个呢是config里面定义分割符的时候少了引号，还一个最坑的就是我一直在改_layouts/post.html，all post页面其实是archive.html。&lt;/p>
+&lt;p>唉，思维惯势不可取，还一点是要细心，其实目录结构里看一下就知道了，就是每次翻倒都是扫一眼就过，该。&lt;/p>
+&lt;p>PS:发布的时候一直出错，显示&amp;rsquo;if' tag was never closed，按&lt;a class="link" href="https://blog.csdn.net/zhangpeterx/article/details/103920538" target="_blank" rel="noopener"
+>GitHub 博客&amp;ndash; Jekyll&amp;ndash;代码高亮，Liquid 转义字符&lt;/a>的方法加了raw终于解决了，还一个就是tag里我写了个size。。。两个问题我花了好几个小时才解决。&lt;/p></description></item></channel></rss>

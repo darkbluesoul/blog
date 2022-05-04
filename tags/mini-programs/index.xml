@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>mini programs on Darkblue Soul</title><link>https://www.darkbluesoul.cc/tags/mini-programs/</link><description>Recent content in mini programs on Darkblue Soul</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 02 Mar 2022 16:09:30 +0800</lastBuildDate><atom:link href="https://www.darkbluesoul.cc/tags/mini-programs/index.xml" rel="self" type="application/rss+xml"/><item><title>小程序积分排行</title><link>https://www.darkbluesoul.cc/p/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%A7%AF%E5%88%86%E6%8E%92%E8%A1%8C/</link><pubDate>Wed, 02 Mar 2022 16:09:30 +0800</pubDate><guid>https://www.darkbluesoul.cc/p/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%A7%AF%E5%88%86%E6%8E%92%E8%A1%8C/</guid><description>&lt;p>企业微信里写了个小程序，对学生的积分进行管理，前段时间无聊想着弄个排名吧，因为平时也有扣分，那些平时表现好的犯错跟其他成员扣分一样扣，总觉得亏了点，于是就抄王者荣耀搞了奖分等级，等级高点的扣分的时候就打个折。懒得改小程序，就每个月导出数据库统计一次，扣分打折根据统计出来的排名折扣口算输入。新学期，想着长痛不如短痛，还是直接做在小程序里好了。&lt;/p>
+&lt;h2 id="云数据库新建rank集合">云数据库新建rank集合&lt;/h2>
+&lt;p>字段一开始只有name，reward，graduate三个个字段，后来发现坑了，哪怕数据权限改成“所有用户可读，仅创建者可读写”也无法修改数据，只好再加了个_openid字段，值全部是我自己的openid，然后才正常了，也就是加了openid我才有权限修改，这里折腾了很久，一直以为是自己逻辑弄错了。&lt;/p>
+&lt;h2 id="pagesadminadminjs奖惩处理">pages/admin/admin.js //奖惩处理&lt;/h2>
+&lt;h3 id="数据库初始化">数据库初始化&lt;/h3>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="c1">// score集合保存所有学生的奖惩记录
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">score&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">db&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">collection&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;score&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="kr">const&lt;/span> &lt;span class="nx">rankCollection&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">db&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">collection&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;rank&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="输入姓名从rank集合读取排名计算扣分时的折扣rate">输入姓名从rank集合读取排名计算扣分时的折扣rate&lt;/h3>
+&lt;p>这里我傻了点，我是用for循环找有序数组里对应用户的排名的，其实直接在取好的数组里添加一个顺序字段index，后面直接读取index就可以了。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="c1">// 从rank集合按降序提取前10名未毕业的同学
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">rank10&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">db&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">collection&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;rank&amp;#39;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">where&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">graduate&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="p">}).&lt;/span>&lt;span class="nx">limit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">10&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">orderBy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;reward&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;desc&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="c1">// 奖惩时输入姓名查找前十名次，计算折扣
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">inputName&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">event&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">nowname&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">detail&lt;/span>
+&lt;span class="nx">rank10&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">get&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">success&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">res&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">rate&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">1&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="c1">//查找排名
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span> &lt;span class="nx">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">name&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nx">event&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">detail&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="kd">var&lt;/span> &lt;span class="nx">rate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">0.5&lt;/span>&lt;span class="p">;}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="kd">var&lt;/span> &lt;span class="nx">rate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">0.7&lt;/span>&lt;span class="p">;}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="kd">var&lt;/span> &lt;span class="nx">rate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">0.8&lt;/span>&lt;span class="p">;}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="kd">var&lt;/span> &lt;span class="nx">rate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mf">0.9&lt;/span>&lt;span class="p">;}&lt;/span>
+&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">rate&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">rate&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">rate&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="k">break&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">},&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="奖惩操作负分打折正分累加">奖惩操作：负分打折，正分累加&lt;/h3>
+&lt;p>参考&lt;a class="link" href="https://blog.csdn.net/Shids_/article/details/110142163" target="_blank" rel="noopener"
+>小程序调用另一个函数方法中的值&lt;/a>调用rate，保存数据时判断分数小于0，则乘以rate。累加那段折腾了很久，一开始用的get.where判断用success箭头函数，但就是要么不生效要么新增数据两倍累加，也不懂，就不停试，直到后来看到&lt;a class="link" href="https://www.w3school.com.cn/js/js_errors.asp" target="_blank" rel="noopener"
+>JavaScript 错误 - Throw 和 Try to Catch (w3school.com.cn)&lt;/a>，试了下，好像可以，想着里面应该是个函数，确实可行，就先这样了。中间还出了个拼写错误，现在就不知道试的过程中还有没有别的方法是可以用的了。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript"> &lt;span class="c1">// 添加奖惩信息
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">saveuserinfo&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">score1&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">){&lt;/span> &lt;span class="c1">//负分处理
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="kd">var&lt;/span> &lt;span class="nx">rate&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">rate&lt;/span>
+&lt;span class="nx">score&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">add&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="c1">//添加折后数据
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">data&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">nowname&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">score&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">score1&lt;/span>&lt;span class="o">*&lt;/span>&lt;span class="nx">rate&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">//扣分打折
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">detail&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">detail&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">content&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">content&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">time&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">time&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}).&lt;/span>&lt;span class="nx">then&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">res&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;奖惩成功！&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nx">wx&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">showToast&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">title&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;奖惩成功！&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">icon&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;success&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">duration&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">3000&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">{&lt;/span> &lt;span class="c1">//正分处理
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">score&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">add&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="c1">//添加奖分数据
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">data&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">nowname&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">score&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">score1&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">//奖分不打折
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">detail&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">detail&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">content&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">content&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">time&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">time&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}).&lt;/span>&lt;span class="nx">then&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">res&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;奖惩成功！&amp;#39;&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nx">wx&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">showToast&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">title&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;奖惩成功！&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">icon&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s1">&amp;#39;success&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">duration&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">3000&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="c1">//加分写入rank集合，if的几种情况不累加，不知道怎么or。。。
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">content&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;申请通过&amp;#34;&lt;/span>&lt;span class="p">){}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">content&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;申请成功&amp;#34;&lt;/span>&lt;span class="p">){}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">content&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;战队排行&amp;#34;&lt;/span>&lt;span class="p">){}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">content&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;提交检讨&amp;#34;&lt;/span>&lt;span class="p">){}&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">{&lt;/span> &lt;span class="c1">//把加分累加到总奖分里
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">nowname&lt;/span>&lt;span class="p">,&lt;/span>&lt;span class="nx">score1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="c1">//先添加数据，数据库name唯一索引，已有name会出错，错误时更新reward
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">rankCollection&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">add&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">data&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">graduate&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="c1">//既然有加分那肯定没毕业
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">nowname&lt;/span>&lt;span class="p">,&lt;/span>
+&lt;span class="nx">reward&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">score1&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}).&lt;/span>&lt;span class="k">catch&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kd">function&lt;/span>&lt;span class="p">()&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;已有用户数据,更新总奖分&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="nx">rankCollection&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">where&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">nowname&lt;/span>
+&lt;span class="p">}).&lt;/span>&lt;span class="nx">update&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">data&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">reward&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">_&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">inc&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">score1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">,&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="pagesindexindexjs首页等级逻辑">pages/index/index.js //首页等级逻辑&lt;/h2>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="c1">// 读取当前用户在前十名中的名次，未匹配则为青铜
+&lt;/span>&lt;span class="c1">&lt;/span>&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;[获取]user集合用户姓名: &amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">nowname&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nx">rankCollection&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">where&lt;/span>&lt;span class="p">({&lt;/span> &lt;span class="c1">//毕业学生全部都是传奇王者
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="nx">name&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">nowname&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">.&lt;/span>&lt;span class="nx">get&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">success&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">res&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="mi">0&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">graduate&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">{&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">grade&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;☆☆☆☆☆传奇王者☆☆☆☆☆&amp;#34;&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;等级: &amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="nx">grade&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">rank10&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">get&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">success&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">res&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">grade&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;★倔强青铜★&amp;#34;&lt;/span> &lt;span class="c1">//在校生默认青铜
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="p">})&lt;/span>
+&lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kd">let&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="mi">0&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="nx">i&lt;/span>&lt;span class="o">++&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="c1">//查找前十名次
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span> &lt;span class="nx">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">data&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">name&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="nx">nowname&lt;/span>&lt;span class="p">){&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">grade&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;★★★★★荣耀王者★★★★★&amp;#34;&lt;/span>
+&lt;span class="p">})}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">grade&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;★★★★至尊星耀★★★★&amp;#34;&lt;/span>
+&lt;span class="p">})}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">grade&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;★★★永恒钻石★★★&amp;#34;&lt;/span>
+&lt;span class="p">})}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="p">{&lt;/span>&lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">grade&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;★★尊贵铂金★★&amp;#34;&lt;/span>
+&lt;span class="p">})}&lt;/span>
+&lt;span class="nx">console&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">log&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">grade&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="k">break&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="p">},&lt;/span>
+&lt;span class="nx">fail&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="c1">//从来没加过分的同学都是青铜
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">grade&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="s2">&amp;#34;★倔强青铜★&amp;#34;&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="pagesindexindexwxml首页渲染">pages/index/index.wxml //首页渲染&lt;/h2>
+&lt;p>用了个&lt;a class="link" href="https://youzan.github.io/vant-weapp/#/quickstart" target="_blank" rel="noopener"
+>Vant Weapp&lt;/a>的UI组件vantvan-button展示等级，CSS我不知道怎么修改，就只好挑自己喜欢的组件用了。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="nt">&amp;lt;van-button&lt;/span> &lt;span class="na">type=&lt;/span>&lt;span class="s">&amp;#34;warning&amp;#34;&lt;/span> &lt;span class="na">size=&lt;/span>&lt;span class="s">&amp;#34;large&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>{{grade}}&lt;span class="nt">&amp;lt;/van-button&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="前十名次计算的另一种思路">前十名次计算的另一种思路&lt;/h2>
+&lt;p>用for循环增加index名次字段，然后读取名次就好了，做前二十的排行榜的时候网上找的办法。&lt;/p>
+&lt;p>按前面的方法，rank20只有名字和总奖分，渲染的页面就是一个ranklist循环：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-xml" data-lang="xml">&lt;span class="c">&amp;lt;!--pages/rank/rank.wxml--&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;block&lt;/span> &lt;span class="na">wx:for=&lt;/span>&lt;span class="s">&amp;#34;{{ranklist}}&amp;#34;&lt;/span> &lt;span class="na">wx:key=&lt;/span>&lt;span class="s">&amp;#34;_id&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;van-cell&lt;/span> &lt;span class="na">value=&lt;/span>&lt;span class="s">&amp;#34;{{item.reward}}&amp;#34;&lt;/span> &lt;span class="err">center&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;view&lt;/span> &lt;span class="na">slot=&lt;/span>&lt;span class="s">&amp;#34;title&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;view&lt;/span> &lt;span class="na">class=&lt;/span>&lt;span class="s">&amp;#34;van-cell-text&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>{{item.index}}. {{item.name }}&lt;span class="nt">&amp;lt;/view&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;van-tag&lt;/span> &lt;span class="na">type=&lt;/span>&lt;span class="s">&amp;#34;danger&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>{{item.grade}}&lt;span class="nt">&amp;lt;/van-tag&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/view&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/van-cell&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/block&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>不知道怎么在wxml加其他要展示的信息，那就只能在rank.js里想办法了。
+pages/rank/rank.js：for循环添加名次index和等级grade字段到ranklist。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-javascript" data-lang="javascript">&lt;span class="kr">const&lt;/span> &lt;span class="nx">rank20&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">db&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">collection&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;rank&amp;#39;&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">where&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">graduate&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="mi">0&lt;/span>
+&lt;span class="p">}).&lt;/span>&lt;span class="nx">limit&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="mi">20&lt;/span>&lt;span class="p">).&lt;/span>&lt;span class="nx">orderBy&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s1">&amp;#39;reward&amp;#39;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s1">&amp;#39;desc&amp;#39;&lt;/span>&lt;span class="p">);&lt;/span>
+&lt;span class="nx">rank20&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">get&lt;/span>&lt;span class="p">()&lt;/span>
+&lt;span class="p">.&lt;/span>&lt;span class="nx">then&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="kr">async&lt;/span> &lt;span class="nx">res&lt;/span> &lt;span class="p">=&amp;gt;&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="kd">var&lt;/span> &lt;span class="nx">ranklist&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nx">res&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">data&lt;/span>
+&lt;span class="c1">// console.log(ranklist)
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">for&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="kr">const&lt;/span> &lt;span class="nx">i&lt;/span> &lt;span class="k">in&lt;/span> &lt;span class="nx">ranklist&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="p">{&lt;/span>
+&lt;span class="nx">ranklist&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">index&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="nb">Number&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">)&lt;/span>&lt;span class="o">+&lt;/span>&lt;span class="mi">1&lt;/span>
+&lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nb">Number&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">1&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="nx">ranklist&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">grade&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;★★★★★荣耀王者★★★★★&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span> &lt;span class="p">(&lt;/span>&lt;span class="nb">Number&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">3&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="nx">ranklist&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">grade&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;★★★★至尊星耀★★★★&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">Number&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">6&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="nx">ranklist&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">grade&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;★★★永恒钻石★★★&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="k">else&lt;/span> &lt;span class="k">if&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nb">Number&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">)&lt;/span> &lt;span class="o">&amp;lt;&lt;/span> &lt;span class="mi">10&lt;/span>&lt;span class="p">){&lt;/span>&lt;span class="nx">ranklist&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">grade&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;★★尊贵铂金★★&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="k">else&lt;/span>&lt;span class="p">{&lt;/span>&lt;span class="nx">ranklist&lt;/span>&lt;span class="p">[&lt;/span>&lt;span class="nx">i&lt;/span>&lt;span class="p">].&lt;/span>&lt;span class="nx">grade&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;★倔强青铜★&amp;#34;&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="p">}&lt;/span>
+&lt;span class="c1">// console.log(ranklist)
+&lt;/span>&lt;span class="c1">&lt;/span> &lt;span class="k">this&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="nx">setData&lt;/span>&lt;span class="p">({&lt;/span>
+&lt;span class="nx">ranklist&lt;/span>&lt;span class="o">:&lt;/span> &lt;span class="nx">ranklist&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;span class="p">})&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="结语">结语&lt;/h2>
+&lt;p>开学一个礼拜就干了这个，换成懂的人，估计几分钟就解决了吧，那几天脑子里都在想为什么写的跟实现的不一样，怎么才能解决，然后就是各种搜索。官方文档确实很有用，有些问题就是直接抄的官方文档里的代码稍微改改就可以了。&lt;/p>
+&lt;p>挺好的，实现了自己想要的功能，很有成就感。&lt;/p></description></item></channel></rss>
