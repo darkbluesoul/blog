@@ -1,4 +1,100 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Darkblue Soul</title><link>https://www.darkbluesoul.cc/post/</link><description>Recent content in Posts on Darkblue Soul</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Wed, 02 Mar 2022 16:09:30 +0800</lastBuildDate><atom:link href="https://www.darkbluesoul.cc/post/index.xml" rel="self" type="application/rss+xml"/><item><title>小程序积分排行</title><link>https://www.darkbluesoul.cc/p/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%A7%AF%E5%88%86%E6%8E%92%E8%A1%8C/</link><pubDate>Wed, 02 Mar 2022 16:09:30 +0800</pubDate><guid>https://www.darkbluesoul.cc/p/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%A7%AF%E5%88%86%E6%8E%92%E8%A1%8C/</guid><description>&lt;p>企业微信里写了个小程序，对学生的积分进行管理，前段时间无聊想着弄个排名吧，因为平时也有扣分，那些平时表现好的犯错跟其他成员扣分一样扣，总觉得亏了点，于是就抄王者荣耀搞了奖分等级，等级高点的扣分的时候就打个折。懒得改小程序，就每个月导出数据库统计一次，扣分打折根据统计出来的排名折扣口算输入。新学期，想着长痛不如短痛，还是直接做在小程序里好了。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Darkblue Soul</title><link>https://www.darkbluesoul.cc/post/</link><description>Recent content in Posts on Darkblue Soul</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 18 Apr 2022 08:52:10 +0800</lastBuildDate><atom:link href="https://www.darkbluesoul.cc/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Python Crash Course学习笔记</title><link>https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 18 Apr 2022 08:52:10 +0800</pubDate><guid>https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/python-course.jpg" alt="Featured image of post Python Crash Course学习笔记" />&lt;p>最近在学《Python Crash Course》，可能是版本的原因，抄作业经常会出错，网上找了下解决办法。&lt;/p>
+&lt;h2 id="error--requestsexceptionsproxyerror1714处理api响应">Error&amp;ndash;requests.exceptions.ProxyError【17.1.4　处理API响应】&lt;/h2>
+&lt;p>调用API一直报错，请求异常，代理错误。
+参考:&lt;a class="link" href="https://blog.csdn.net/qq_39241986/article/details/80457017" target="_blank" rel="noopener"
+>令人不悦的Error&amp;ndash;requests.exceptions.ProxyError&lt;/a>
+python_repos.py修改：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="c1"># 执行API调用并存储响应&lt;/span>
+&lt;span class="n">url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;https://api.github.com/search/repositories?q=language:python&amp;amp;sort=stars&amp;#39;&lt;/span>
+&lt;span class="n">r&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">requests&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Status code:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">r&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">status_code&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>为：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="c1"># 执行API调用并存储响应&lt;/span>
+&lt;span class="n">url&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="s1">&amp;#39;https://api.github.com/search/repositories?q=language:python&amp;amp;sort=stars&amp;#39;&lt;/span>
+&lt;span class="c1"># 绕过系统代理&lt;/span>
+&lt;span class="n">proxies&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="p">{&lt;/span> &lt;span class="s2">&amp;#34;http&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">None&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="s2">&amp;#34;https&amp;#34;&lt;/span>&lt;span class="p">:&lt;/span> &lt;span class="kc">None&lt;/span>&lt;span class="p">}&lt;/span>
+&lt;span class="n">r&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">requests&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">get&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">url&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">proxies&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">proxies&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;span class="nb">print&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="s2">&amp;#34;Status code:&amp;#34;&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">r&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">status_code&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="无法加载文件scriptsactivateps11814激活虚拟环境">无法加载文件Scripts\Activate.ps1【18.1.4　激活虚拟环境】&lt;/h2>
+&lt;p>&lt;code>ll_env\Scripts\activate&lt;/code>一直激活不了虚拟环境，报错无法加载文件。
+参考：&lt;a class="link" href="https://blog.csdn.net/weixin_43031092/article/details/113412866" target="_blank" rel="noopener"
+>Win10 VS Code pipenv无法加载文件Scripts\Activate.ps1&lt;/a>
+我是直接在VS自带的终端输入&lt;code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned&lt;/code>回车，然后就好了。&lt;/p>
+&lt;h2 id="error-requested-setting-installed_apps-but-settings-are-not-configured1816在django中创建项目">Error: Requested setting INSTALLED_APPS, but settings are not configured【18.1.6　在Django中创建项目】&lt;/h2>
+&lt;p>新建项目&lt;code>django-admin.py startproject learning_log .&lt;/code>报错。
+参考：&lt;a class="link" href="https://blog.csdn.net/zjiang1994/article/details/52680731" target="_blank" rel="noopener"
+>Python [解决方法] error: Requested setting INSTALLED_APPS, but settings are not configured&lt;/a>
+修改：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="nb">django-admin&lt;/span>&lt;span class="p">.&lt;/span>&lt;span class="n">py&lt;/span> &lt;span class="n">startproject&lt;/span> &lt;span class="n">learning_log&lt;/span> &lt;span class="p">.&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>为：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-powershell" data-lang="powershell">&lt;span class="nb">django-admin&lt;/span> &lt;span class="n">startproject&lt;/span> &lt;span class="n">learning_log&lt;/span> &lt;span class="p">.&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="typeerror-__init__-missing-1-required-positional-argument-on_delete1825迁移模型entry">TypeError: &lt;strong>init&lt;/strong>() missing 1 required positional argument: ‘on_delete‘【18.2.5　迁移模型Entry】&lt;/h2>
+&lt;p>&lt;code>python manage.py makemigrations learning_logs&lt;/code>出错，显示&lt;code>TypeError: __init__() missing 1 required positional argument: ‘on_delete‘&lt;/code>。&lt;/p>
+&lt;p>参考：&lt;a class="link" href="https://blog.csdn.net/yu12345_/article/details/120039586" target="_blank" rel="noopener"
+>【异常】TypeError: &lt;strong>init&lt;/strong>() missing 1 required positional argument: ‘on_delete‘&lt;/a>，在【18.2.4　定义模型Entry】models.py定义外键时加上位参on_delete。
+修改：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="k">class&lt;/span> &lt;span class="nc">Entry&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">models&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Model&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;学到的有关某个主题的具体知识&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;span class="n">topic&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">models&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">ForeignKey&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Topic&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>为：&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-python" data-lang="python">&lt;span class="k">class&lt;/span> &lt;span class="nc">Entry&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">models&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">Model&lt;/span>&lt;span class="p">):&lt;/span>
+&lt;span class="s2">&amp;#34;&amp;#34;&amp;#34;学到的有关某个主题的具体知识&amp;#34;&amp;#34;&amp;#34;&lt;/span>
+&lt;span class="n">topic&lt;/span> &lt;span class="o">=&lt;/span> &lt;span class="n">models&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">ForeignKey&lt;/span>&lt;span class="p">(&lt;/span>&lt;span class="n">Topic&lt;/span>&lt;span class="p">,&lt;/span> &lt;span class="n">on_delete&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="n">models&lt;/span>&lt;span class="o">.&lt;/span>&lt;span class="n">CASCADE&lt;/span>&lt;span class="p">)&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div></description></item><item><title>小程序积分排行</title><link>https://www.darkbluesoul.cc/p/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%A7%AF%E5%88%86%E6%8E%92%E8%A1%8C/</link><pubDate>Wed, 02 Mar 2022 16:09:30 +0800</pubDate><guid>https://www.darkbluesoul.cc/p/%E5%B0%8F%E7%A8%8B%E5%BA%8F%E7%A7%AF%E5%88%86%E6%8E%92%E8%A1%8C/</guid><description>&lt;p>企业微信里写了个小程序，对学生的积分进行管理，前段时间无聊想着弄个排名吧，因为平时也有扣分，那些平时表现好的犯错跟其他成员扣分一样扣，总觉得亏了点，于是就抄王者荣耀搞了奖分等级，等级高点的扣分的时候就打个折。懒得改小程序，就每个月导出数据库统计一次，扣分打折根据统计出来的排名折扣口算输入。新学期，想着长痛不如短痛，还是直接做在小程序里好了。&lt;/p>
 &lt;h2 id="云数据库新建rank集合">云数据库新建rank集合&lt;/h2>
 &lt;p>字段一开始只有name，reward，graduate三个个字段，后来发现坑了，哪怕数据权限改成“所有用户可读，仅创建者可读写”也无法修改数据，只好再加了个_openid字段，值全部是我自己的openid，然后才正常了，也就是加了openid我才有权限修改，这里折腾了很久，一直以为是自己逻辑弄错了。&lt;/p>
 &lt;h2 id="pagesadminadminjs奖惩处理">pages/admin/admin.js //奖惩处理&lt;/h2>
@@ -596,18 +692,18 @@ alt="MVM-logo-full.png"
 loading="lazy"
 alt="DARKBLUESOULlast.png"
 >&lt;/p>
-&lt;p>所以现在我又回到最早的版本了，现在是路径了，不会再丢字体了。也好的，兜来兜去，知道的又多了点，不是么？&lt;/p></description></item><item><title>jekyll之折腾</title><link>https://www.darkbluesoul.cc/p/jekyll%E4%B9%8B%E6%8A%98%E8%85%BE/</link><pubDate>Fri, 17 Dec 2021 13:32:20 -0600</pubDate><guid>https://www.darkbluesoul.cc/p/jekyll%E4%B9%8B%E6%8A%98%E8%85%BE/</guid><description>&lt;h3 id="jekyll对新手略难">jekyll对新手略难&lt;/h3>
+&lt;p>所以现在我又回到最早的版本了，现在是路径了，不会再丢字体了。也好的，兜来兜去，知道的又多了点，不是么？&lt;/p></description></item><item><title>jekyll之折腾</title><link>https://www.darkbluesoul.cc/p/jekyll%E4%B9%8B%E6%8A%98%E8%85%BE/</link><pubDate>Fri, 17 Dec 2021 13:32:20 -0600</pubDate><guid>https://www.darkbluesoul.cc/p/jekyll%E4%B9%8B%E6%8A%98%E8%85%BE/</guid><description>&lt;h2 id="jekyll对新手略难">jekyll对新手略难&lt;/h2>
 &lt;p>Linux Mint安装&lt;a class="link" href="http://jekyllcn.com/" target="_blank" rel="noopener"
 >jekyll&lt;/a>，有点忘了，装ruby就折腾了好久，各种出错，应该就是Linux命令不熟的原因，最后算是弄好了，git push都正常，就是觉得主题不好看，下个主题么，又是缺东少西的，就懒得弄了。后面无聊搜了下Linux发行版的排名，下了个排第一的MXLinux，重装系统，jekyll啥的就都没了。&lt;/p>
-&lt;h3 id="gridea简单模板少">Gridea简单，模板少&lt;/h3>
+&lt;h2 id="gridea简单模板少">Gridea简单，模板少&lt;/h2>
 &lt;p>懒得再装jekyll，试了下grdiea，很方便，可惜模板太少了。像我这种连CSS都懒得改的，那就最好是拿来就能用的。然后看网上说什么现在jekyll都转hugo了，就又想着用hugo。&lt;/p>
-&lt;h3 id="hugo很方便">hugo很方便&lt;/h3>
+&lt;h2 id="hugo很方便">hugo很方便&lt;/h2>
 &lt;p>尤其是我选的&lt;a class="link" href="https://themes.gohugo.io/themes/hugo-academic/" target="_blank" rel="noopener"
 >acdemic&lt;/a>主题，&lt;a class="link" href="https://wowchemy.com/zh/" target="_blank" rel="noopener"
 >wowchemy&lt;/a>系列，支持netlify一键部署到github，而且repo名随意，建好了自定义个netlify二级域名就可以访问了。
 其实我建了两个，另一个是hogo-blog什么的，就是几个喜欢的主题都是头像在最上面的，不喜欢，还一点就是要本地生成public再部署，也不喜欢。
 舍弃wowchemy，干脆自己部署，主题找了个even，还不错，就是hugo serve后本地访问没问题，push到github就无法访问，最后才想起自己部署错了，把整个站点push上去了，当然没法访问。&lt;/p>
-&lt;h3 id="再用回jekyll就觉得简单了">再用回jekyll就觉得简单了&lt;/h3>
+&lt;h2 id="再用回jekyll就觉得简单了">再用回jekyll就觉得简单了&lt;/h2>
 &lt;p>无聊看了下jekyll的主题，就第一个&lt;a class="link" href="http://jekyllthemes.org/themes/adam-blog-2/" target="_blank" rel="noopener"
 >Adam Blog ver2.0&lt;/a>，手机访问很好看啊，又开始折腾jekyll。
 MXlinux安装ruby：
