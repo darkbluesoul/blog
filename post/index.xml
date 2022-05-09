@@ -1,4 +1,76 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Darkblue Soul</title><link>https://www.darkbluesoul.cc/post/</link><description>Recent content in Posts on Darkblue Soul</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 18 Apr 2022 08:52:10 +0800</lastBuildDate><atom:link href="https://www.darkbluesoul.cc/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Python Crash Course学习笔记</title><link>https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 18 Apr 2022 08:52:10 +0800</pubDate><guid>https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/python-course.jpg" alt="Featured image of post Python Crash Course学习笔记" />&lt;p>最近在学《Python Crash Course》第一版，可能是版本的原因，抄作业经常会出错，网上找了下解决办法。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Darkblue Soul</title><link>https://www.darkbluesoul.cc/post/</link><description>Recent content in Posts on Darkblue Soul</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 09 May 2022 07:57:10 +0800</lastBuildDate><atom:link href="https://www.darkbluesoul.cc/post/index.xml" rel="self" type="application/rss+xml"/><item><title>适用于hugo-theme-stack的微博icon</title><link>https://www.darkbluesoul.cc/p/%E9%80%82%E7%94%A8%E4%BA%8Ehugo-theme-stack%E7%9A%84%E5%BE%AE%E5%8D%9Aicon/</link><pubDate>Mon, 09 May 2022 07:57:10 +0800</pubDate><guid>https://www.darkbluesoul.cc/p/%E9%80%82%E7%94%A8%E4%BA%8Ehugo-theme-stack%E7%9A%84%E5%BE%AE%E5%8D%9Aicon/</guid><description>&lt;img src="https://www.darkbluesoul.cc/p/%E9%80%82%E7%94%A8%E4%BA%8Ehugo-theme-stack%E7%9A%84%E5%BE%AE%E5%8D%9Aicon/brand-weibo.svg" alt="Featured image of post 适用于hugo-theme-stack的微博icon" />&lt;p>总觉得社交资料页没有微博好像少了点什么，网上的图标大多是填充的，修改了颜色放上去也觉得不好看。
+那就自己整个呗，找了&lt;a class="link" href="https://blog.csdn.net/weixin_42247720/article/details/120807255" target="_blank" rel="noopener"
+>qq、微信、微博的svg小图标&lt;/a>，修改了一下，算是满意了。&lt;/p>
+&lt;h2 id="新建微博图标">新建微博图标&lt;/h2>
+&lt;p>新建文件，复制以下代码，保存到assets/icons/brand-weibo.svg。&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-svg" data-lang="svg">&lt;span class="nt">&amp;lt;svg&lt;/span> &lt;span class="na">xmlns=&lt;/span>&lt;span class="s">&amp;#34;http://www.w3.org/2000/svg&amp;#34;&lt;/span> &lt;span class="na">width=&lt;/span>&lt;span class="s">&amp;#34;24&amp;#34;&lt;/span> &lt;span class="na">height=&lt;/span>&lt;span class="s">&amp;#34;24&amp;#34;&lt;/span> &lt;span class="na">viewBox=&lt;/span>&lt;span class="s">&amp;#34;0 0 24 24&amp;#34;&lt;/span> &lt;span class="na">stroke-width=&lt;/span>&lt;span class="s">&amp;#34;2&amp;#34;&lt;/span> &lt;span class="na">stroke=&lt;/span>&lt;span class="s">&amp;#34;currentColor&amp;#34;&lt;/span> &lt;span class="na">fill=&lt;/span>&lt;span class="s">&amp;#34;none&amp;#34;&lt;/span> &lt;span class="na">stroke-linecap=&lt;/span>&lt;span class="s">&amp;#34;round&amp;#34;&lt;/span> &lt;span class="na">stroke-linejoin=&lt;/span>&lt;span class="s">&amp;#34;round&amp;#34;&lt;/span>&lt;span class="nt">&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;path&lt;/span> &lt;span class="na">class=&lt;/span>&lt;span class="s">&amp;#34;st0&amp;#34;&lt;/span> &lt;span class="na">d=&lt;/span>&lt;span class="s">&amp;#34;M10,20.4c-3.9,0-8-1.9-8-5.1c0-1.7,1.1-3.6,2.9-5.3c3.7-3.7,7.6-3.7,6.5-0.2c-0.3,0.5,0.4,0.2,0.4,0.2
+&lt;/span>&lt;span class="s"> c3-1.3,5.2-0.6,4.2,1.9c-0.1,0.4,0,0.4,0.3,0.5C21.3,14,17.6,20.4,10,20.4L10,20.4z M18.7,10c1.3-3.9-3-3.6-3-3.3 M21.7,10.5
+&lt;/span>&lt;span class="s"> c1.9-7.5-6-7.6-6.2-6.6&amp;#34;&lt;/span>&lt;span class="nt">/&amp;gt;&lt;/span>
+&lt;span class="nt">&amp;lt;/svg&amp;gt;&lt;/span>
+&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h2 id="修改站点配置">修改站点配置&lt;/h2>
+&lt;p>修改config.yaml,在&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="nt">social&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">identifier&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">github&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">GitHub&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">url&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://github.com/yourID&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">params&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">icon&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">brand-github&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>- &lt;span class="nt">identifier&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">twitter&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Twitter&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">url&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://twitter.com/yourID&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">params&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">icon&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">brand-twitter&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>下面增加&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-yaml" data-lang="yaml">&lt;span class="w"> &lt;/span>- &lt;span class="nt">identifier&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">weibo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">name&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">Weibo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">url&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">https://weibo.com/yourID&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="c">#改成你自己的微博地址&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">params&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w">
+&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="nt">icon&lt;/span>&lt;span class="p">:&lt;/span>&lt;span class="w"> &lt;/span>&lt;span class="l">brand-weibo&lt;/span>&lt;span class="w">
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;p>保存。&lt;/p>
+&lt;h2 id="后记">后记&lt;/h2>
+&lt;p>得瑟了几天，微博也全部设为可见，可还是找不回当时玩微博的感觉，物是人非啊，还是关了吧，设成半年可见，然后再把新的一条条改为自己可见，唉，这操作已经不是第一次了。算了，还是不用了。&lt;/p></description></item><item><title>Python Crash Course学习笔记</title><link>https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 18 Apr 2022 08:52:10 +0800</pubDate><guid>https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid><description>&lt;img src="https://www.darkbluesoul.cc/p/python-crash-course%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/python-course.jpg" alt="Featured image of post Python Crash Course学习笔记" />&lt;p>最近在学《Python Crash Course》第一版，可能是版本的原因，抄作业经常会出错，网上找了下解决办法。&lt;/p>
 &lt;h2 id="error--requestsexceptionsproxyerror1714处理api响应">Error&amp;ndash;requests.exceptions.ProxyError【17.1.4　处理API响应】&lt;/h2>
 &lt;p>调用API一直报错，请求异常，代理错误。
 参考:&lt;a class="link" href="https://blog.csdn.net/qq_39241986/article/details/80457017" target="_blank" rel="noopener"
